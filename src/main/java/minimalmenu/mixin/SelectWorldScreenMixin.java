@@ -3,13 +3,13 @@ package minimalmenu.mixin;
 import java.io.File;
 import java.util.List;
 
+import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import minimalmenu.config.ConfigHandler;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
 import net.minecraft.client.gui.screen.Screen;
@@ -33,11 +33,11 @@ public abstract class SelectWorldScreenMixin extends ScreenMixin {
                     this.width / 2 - 232, //Create open saves folder button.
                     this.height - 28,
                     72, 20,
-                    new LiteralText("Folder"),
+                    new TranslatableText("minimalmenu.screen.singleplayer.saves"),
                     (button -> {
                         assert this.client != null;
                         File file = client.runDirectory.toPath().resolve("saves").toFile(); //Create saves file from current running directory.
-                        Util.getOperatingSystem().open(file); //Amazingly, minecraft already has a method for opening a file.
+                        Util.getOperatingSystem().open(file);
                     })));
         }
         if (ConfigHandler.ADD_RELOAD_SAVES) {
@@ -46,10 +46,10 @@ public abstract class SelectWorldScreenMixin extends ScreenMixin {
                     this.width / 2 - 232, //Create reload button.
                     this.height - 52,
                     72, 20,
-                    new LiteralText("Reload"),
+                        new TranslatableText("minimalmenu.screen.singleplayer.reload"),
                     button -> {
                         assert this.client != null;
-                        this.client.openScreen(new SelectWorldScreen(parent)); //Refresh screen, by creating a new one.
+                        this.client.setScreenAndRender(new SelectWorldScreen(parent)); //Refresh screen, by creating a new one.
                     }));
         }
     }

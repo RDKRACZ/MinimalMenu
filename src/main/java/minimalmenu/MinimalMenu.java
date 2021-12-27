@@ -1,11 +1,13 @@
 package minimalmenu;
 
+import java.io.File;
 import java.util.List;
-
+import minimalmenu.screens.FolderScreen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.util.Util;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import minimalmenu.config.ConfigHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
@@ -16,7 +18,6 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Language;
 
 public class MinimalMenu implements ClientModInitializer {
-
     public static Logger LOGGER = LogManager.getLogger();
 
     public static final String MOD_ID = "minimalmenu";
@@ -87,5 +88,16 @@ public class MinimalMenu implements ClientModInitializer {
             }
         }
         return false;
+    }
+
+    public static void processButtonFolderClick(MinecraftClient client) {
+        if (ConfigHandler.OPEN_FOLDER_SCREEN) {
+            FolderScreen folderScreen = new FolderScreen(client.currentScreen);
+            client.setScreenAndRender(folderScreen);
+        } else {
+            assert client != null;
+            File file = client.runDirectory.toPath().toFile();
+            Util.getOperatingSystem().open(file);
+        }
     }
 }
